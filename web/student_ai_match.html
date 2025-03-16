@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智多多 - 尋找老師 (AI智能匹配)</title>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    background-color: #f7fafc;
+    color: #333;
+    line-height: 1.6;
+    background-image: linear-gradient(120deg, #f5f7fa 0%, #e4eef9 100%);
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.content-box {
+    background: white;
+    border-radius: 28px;
+    box-shadow: 0 10px 25px rgba(49, 75, 212, 0.12);
+    width: 90%;
+    max-width: 1000px;
+    padding: 40px;
+    margin: 30px auto;
+}
+
+h1, h2, h3 {
+    color: #2d3748;
+    font-weight: 700;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+
+.btn {
+    padding: 14px 24px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-size: 16px;
+    letter-spacing: 0.3px;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #4285f4, #3b5fe2);
+    color: white;
+}
+
+.btn-secondary {
+    background: #f8fafc;
+    color: #4a5568;
+    border: 1px solid #e2e8f0;
+}
+
+.btn-ai {
+    background: linear-gradient(135deg, #9c27b0, #8e24aa);
+    color: white;
+}
+
+.filter-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+.matching-buttons {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+}
+
+.matching-buttons .btn {
+    flex: 1;
+    text-align: center;
+}
+
+.matching-buttons .btn.active {
+    box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);
+}
+
+.ai-matching-info {
+    display: flex;
+    background: #f9f0fb;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 24px;
+    border-left: 4px solid #9c27b0;
+    align-items: center;
+}
+
+.info-icon {
+    margin-right: 16px;
+}
+
+.info-text {
+    font-size: 15px;
+    color: #4a5568;
+    line-height: 1.5;
+}
+
+.results {
+    display: grid;
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+.profile-card {
+    border: none;
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.profile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.profile-card.featured {
+    border: 2px solid #9c27b0;
+    box-shadow: 0 8px 30px rgba(156, 39, 176, 0.15);
+}
+
+.matching-type {
+    background: #e8f0fe;
+    color: #4285f4;
+    padding: 6px 12px;
+    border-radius: 18px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 5px rgba(66, 133, 244, 0.15);
+}
+
+.matching-type.ai-matching {
+    background: linear-gradient(135deg, #f3e5f5, #ebdbf0);
+    color: #9c0eb0;
+    box-shadow: 0 2px 5px rgba(156, 39, 176, 0.15);
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.profile-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4285f4, #3b5fe2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    font-size: 22px;
+    box-shadow: 0 4px 10px rgba(66, 133, 244, 0.25);
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-name {
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 4px;
+    color: #2d3748;
+}
+
+.profile-subject {
+    font-size: 14px;
+    color: #666;
+}
+
+.match-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #f3e5f5, #ebdbf0);
+    color: #9c0eb0;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 22px;
+}
+
+.match-label {
+    font-size: 11px;
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+.profile-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.profile-tag {
+    background: #f1f7ff;
+    padding: 6px 12px;
+    border-radius: 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4285f4;
+    border: 1px solid rgba(66, 133, 244, 0.2);
+}
+
+.reason-badge {
+    background: linear-gradient(135deg, #fffbeb, #fef3c7);
+    color: #92400e;
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin-top: 16px;
+    font-size: 14px;
+    position: relative;
+    border-left: 4px solid #f59e0b;
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.teacher-description {
+    margin: 16px 0;
+    line-height: 1.5;
+    color: #4a5568;
+    font-size: 15px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.action-buttons .btn {
+    flex: 1;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 30px;
+}
+
+.pagination-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pagination-btn:hover {
+    background: #f1f7ff;
+}
+
+.pagination-btn.active {
+    background: #9c27b0;
+    color: white;
+    border-color: #9c27b0;
+}
+
+.pagination-btn.next {
+    width: auto;
+    padding: 0 15px;
+}
+
+/* Decorative elements for modern feel */
+.container:before {
+    content: "";
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(135deg, rgba(147, 112, 219, 0.2), rgba(66, 133, 244, 0.2));
+    border-radius: 50%;
+    top: -100px;
+    left: -100px;
+    z-index: -1;
+}
+
+.container:after {
+    content: "";
+    position: fixed;
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, rgba(255, 122, 89, 0.15), rgba(255, 82, 82, 0.15));
+    border-radius: 50%;
+    bottom: -50px;
+    right: -50px;
+    z-index: -1;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content-box">
+            <div class="navbar">
+                <div></div>
+                <h2>尋找老師</h2>
+                <button class="btn-secondary filter-btn">篩選</button>
+            </div>
+            
+            <div class="matching-buttons">
+                <button class="btn btn-secondary">一般匹配</button>
+                <button class="btn btn-ai active">AI 智能匹配</button>
+            </div>
+            
+            <div class="ai-matching-info">
+                <div class="info-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#9C27B0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 16V12" stroke="#9C27B0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 8H12.01" stroke="#9C27B0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="info-text">
+                    <p>AI智能匹配基於您的學習風格、興趣與需求，推薦最合適的老師。</p>
+                </div>
+            </div>
+            
+            <div class="results">
+                <div class="profile-card featured">
+                    <span class="matching-type ai-matching">AI 智能推薦</span>
+                    
+                    <div class="profile-header">
+                        <div class="profile-avatar">張</div>
+                        <div class="profile-info">
+                            <div class="profile-name">張老師</div>
+                            <div class="profile-subject">數學 | 台北市</div>
+                        </div>
+                        <div class="match-score">
+                            <span>95%</span>
+                            <div class="match-label">匹配度</div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-details">
+                        <span class="profile-tag">5年經驗</span>
+                        <span class="profile-tag">600元/小時</span>
+                        <span class="profile-tag">國立台灣大學</span>
+                    </div>
+                    
+                    <div class="reason-badge">
+                        <strong>匹配理由:</strong> 根據您的學習風格和預算範圍，張老師的教學方法最適合您，並且有很好的數學成績提升記錄。張老師擅長將抽象概念具體化，適合您的視覺學習偏好。
+                    </div>
+                    
+                    <div class="teacher-description">
+                        <p>專注於高中數學教學，特別是針對數學思維不夠靈活的學生，能夠設計適合的學習計畫並逐步提升學習能力。教學時注重基礎概念解析，並用圖形與實例輔助理解。</p>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-primary">聯絡老師</button>
+                        <button class="btn btn-secondary">查看詳情</button>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <span class="matching-type ai-matching">AI 智能推薦</span>
+                    
+                    <div class="profile-header">
+                        <div class="profile-avatar">林</div>
+                        <div class="profile-info">
+                            <div class="profile-name">林老師</div>
+                            <div class="profile-subject">數學 | 新北市</div>
+                        </div>
+                        <div class="match-score">
+                            <span>83%</span>
+                            <div class="match-label">匹配度</div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-details">
+                        <span class="profile-tag">3年經驗</span>
+                        <span class="profile-tag">500元/小時</span>
+                        <span class="profile-tag">國立師範大學</span>
+                    </div>
+                    
+                    <div class="reason-badge">
+                        <strong>匹配理由:</strong> 林老師的教學方式適合喜歡互動式學習的學生，且收費符合您的預算範圍。
+                    </div>
+                    
+                    <div class="teacher-description">
+                        <p>專注於高中數學教學，擅長講解數學概念與解題技巧，教學風格生動活潑，著重培養學生的邏輯思維能力。</p>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-primary">聯絡老師</button>
+                        <button class="btn btn-secondary">查看詳情</button>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <span class="matching-type ai-matching">AI 智能推薦</span>
+                    
+                    <div class="profile-header">
+                        <div class="profile-avatar">王</div>
+                        <div class="profile-info">
+                            <div class="profile-name">王老師</div>
+                            <div class="profile-subject">數學 | 台北市</div>
+                        </div>
+                        <div class="match-score">
+                            <span>76%</span>
+                            <div class="match-label">匹配度</div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-details">
+                        <span class="profile-tag">8年經驗</span>
+                        <span class="profile-tag">800元/小時</span>
+                        <span class="profile-tag">國立交通大學</span>
+                    </div>
+                    
+                    <div class="reason-badge">
+                        <strong>匹配理由:</strong> 王老師有豐富的教學經驗，特別擅長引導學生準備升學考試，可針對考試弱點進行加強。
+                    </div>
+                    
+                    <div class="teacher-description">
+                        <p>資深數學教師，特別專精於高中數學教學與升學考試準備，教學方法系統化且重視解題技巧與時間管理，適合即將面臨考試的學生。</p>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-primary">聯絡老師</button>
+                        <button class="btn btn-secondary">查看詳情</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pagination">
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn">2</button>
+                <button class="pagination-btn next">下一頁 →</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智多多 - 教師儀表板</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: #f7fafc;
+            color: #333;
+            line-height: 1.6;
+            background-image: linear-gradient(120deg, #f5f7fa 0%, #e4eef9 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+        }
+        
+        .sidebar {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            height: fit-content;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+        }
+        
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .user-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #9c27b0, #8e24aa);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 36px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);
+        }
+        
+        .user-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .user-status {
+            font-size: 14px;
+            color: #48bb78;
+            background: #f0fff4;
+            padding: 4px 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .user-details {
+            font-size: 14px;
+            color: #718096;
+        }
+        
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .menu-item {
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #4a5568;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-item:hover {
+            background: #f1f7ff;
+        }
+        
+        .menu-item.active {
+            background: #9c27b0;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .menu-item svg {
+            margin-right: 12px;
+        }
+        
+        .icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        
+        h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .welcome-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .welcome-text {
+            flex: 1;
+        }
+        
+        .welcome-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        
+        .welcome-subtitle {
+            font-size: 16px;
+            color: #718096;
+        }
+        
+        .action-btn {
+            padding: 10px 20px;
+            background: #9c27b0;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            background: #8e24aa;
+            transform: translateY(-2px);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .stat-card {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .stat-title {
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        
+        .stat-change {
+            font-size: 12px;
+            color: #48bb78;
+            display: flex;
+            align-items: center;
+        }
+        
+        .stat-change.positive {
+            color: #48bb78;
+        }
+        
+        .stat-change.negative {
+            color: #f56565;
+        }
+        
+        .upcoming-sessions {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .session-card {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .session-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .student-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4285f4, #3b5fe2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 20px;
+            margin-right: 15px;
+        }
+        
+        .student-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .student-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 3px;
+        }
+        
+        .subject {
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 3px;
+        }
+        
+        .session-time {
+            font-size: 14px;
+            color: #9c27b0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .session-time svg {
+            margin-right: 6px;
+        }
+        
+        .session-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .session-btn {
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .session-btn.join {
+            background: #9c27b0;
+            color: white;
+            border: none;
+        }
+        
+        .session-btn.join:hover {
+            background: #8e24aa;
+        }
+        
+        .session-btn.reschedule {
+            background: transparent;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .session-btn.reschedule:hover {
+            background: #f1f7ff;
+        }
+        
+        .income-chart {
+            width: 100%;
+            height: 250px;
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+            position: relative;
+        }
+        
+        .chart-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #718096;
+        }
+        
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            height: 200px;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(180deg, #9c27b0, #8e24aa);
+            border-radius: 6px 6px 0 0;
+        }
+        
+        .weekly-schedule {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .day-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .day-header {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #4a5568;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .time-slot {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 8px;
+            font-size: 12px;
+            color: #718096;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .time-slot:hover {
+            background: #f1f7ff;
+        }
+        
+        .time-slot.available {
+            background: #f0fff4;
+            color: #48bb78;
+            font-weight: 500;
+        }
+        
+        .time-slot.booked {
+            background: #ebf4ff;
+            color: #4299e1;
+            font-weight: 500;
+        }
+        
+        .recommended-students {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .student-card {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .student-card-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4285f4, #3b5fe2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 24px;
+        }
+        
+        .student-card-details {
+            flex: 1;
+        }
+        
+        .student-card-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 3px;
+        }
+        
+        .student-card-grade {
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 6px;
+        }
+        
+        .student-card-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .student-btn {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .student-btn.view {
+            background: #9c27b0;
+            color: white;
+            border: none;
+        }
+        
+        .student-btn.view:hover {
+            background: #8e24aa;
+        }
+        
+        .student-btn.message {
+            background: transparent;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .student-btn.message:hover {
+            background: #f1f7ff;
+        }
+        
+        .notification-btn {
+            position: relative;
+            padding: 8px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 8px;
+            height: 8px;
+            background: #f56565;
+            border-radius: 50%;
+        }
+        
+        @media (max-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .recommended-students {
+                grid-template-columns: 1fr;
+            }
+            
+            .weekly-schedule {
+                grid-template-columns: repeat(4, 1fr);
+                row-gap: 20px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .weekly-schedule {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard">
+            <div class="sidebar">
+                <div class="user-info">
+                    <div class="user-avatar">張</div>
+                    <div class="user-name">張老師</div>
+                    <div class="user-status">已驗證</div>
+                    <div class="user-details">數學教師 | 5年經驗</div>
+                </div>
+                
+                <div class="menu">
+                    <div class="menu-item active">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        儀表板
+                    </div>
+                    <div class="menu-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        課程排程
+                    </div>
+                    <div class="menu-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        尋找學生
+                    </div>
+                    <div class="menu-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="1" x2="12" y2="23"></line>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                        收入管理
+                    </div>
+                    <div class="menu-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="3" y1="9" x2="21" y2="9"></line>
+                            <line x1="9" y1="21" x2="9" y2="9"></line>
+                        </svg>
+                        動態定價
+                    </div>
+                    <div class="menu-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        訊息中心
+                    </div>
+                    <div class="menu-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                        設定
+                    </div>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <div class="content-card">
+                    <div class="welcome-section">
+                        <div class="welcome-text">
+                            <div class="welcome-title">👋 你好，張老師!</div>
+                            <div class="welcome-subtitle">歡迎回到智多多，您今天有 2 堂課程。</div>
+                        </div>
+                        <button class="action-btn">設定動態定價</button>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-title">本月收入</div>
+                            <div class="stat-value">$18,500</div>
+                            <div class="stat-change positive">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="18 15 12 9 6 15"></polyline>
+                                </svg>
+                                較上個月增加 15%
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-title">已完成課時</div>
+                            <div class="stat-value">32</div>
+                            <div class="stat-change positive">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="18 15 12 9 6 15"></polyline>
+                                </svg>
+                                較上個月增加 6 小時
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-title">平均評分</div>
+                            <div class="stat-value">4.9</div>
+                            <div class="stat-change positive">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="18 15 12 9 6 15"></polyline>
+                                </svg>
+                                較上個月增加 0.1
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>
+                        即將到來的課程
+                        <button class="notification-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                            </svg>
+                            <span class="notification-badge"></span>
+                        </button>
+                    </h2>
+                    
+                    <div class="upcoming-sessions">
+                        <div class="session-card">
+                            <div class="session-info">
+                                <div class="student-avatar">王</div>
+                                <div class="student-details">
+                                    <div class="student-name">王同學</div>
+                                    <div class="subject">數學 - 微積分入門</div>
+                                    <div class="session-time">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <polyline points="12 6 12 12 16 14"></polyline>
+                                        </svg>
+                                        今天，下午 2:00 - 4:00
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="session-actions">
+                                <button class="session-btn join">開始課程</button>
+                                <button class="session-btn reschedule">重新排程</button>
+                            </div>
+                        </div>
+                        
+                        <div class="session-card">
+                            <div class="session-info">
+                                <div class="student-avatar">李</div>
+                                <div class="student-details">
+                                    <div class="student-name">李同學</div>
+                                    <div class="subject">數學 - 代數基礎</div>
+                                    <div class="session-time">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <polyline points="12 6 12 12 16 14"></polyline>
+                                        </svg>
+                                        明天，下午 5:00 - 6:30
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="session-actions">
+                                <button class="session-btn reschedule">重新排程</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>收入趨勢</h2>
+                    
+                    <div class="income-chart">
+                        <div class="chart-bars">
+                            <div class="chart-bar" style="height: 40%;"></div>
+                            <div class="chart-bar" style="height: 65%;"></div>
+                            <div class="chart-bar" style="height: 55%;"></div>
+                            <div class="chart-bar" style="height: 70%;"></div>
+                            <div class="chart-bar" style="height: 75%;"></div>
+                            <div class="chart-bar" style="height: 85%;"></div>
+                            <div class="chart-bar" style="height: 90%;"></div>
+                        </div>
+                        <div class="chart-labels">
+                            <div>6月</div>
+                            <div>7月</div>
+                            <div>8月</div>
+                            <div>9月</div>
+                            <div>10月</div>
+                            <div>11月</div>
+                            <div>12月</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>本週課程排程</h2>
+                    
+                    <div class="weekly-schedule">
+                        <div class="day-column">
+                            <div class="day-header">週一</div>
+                            <div class="time-slot">09:00</div>
+                            <div class="time-slot">10:00</div>
+                            <div class="time-slot booked">14:00<br>王同學</div>
+                            <div class="time-slot booked">16:00<br>張同學</div>
+                            <div class="time-slot available">18:00</div>
+                        </div>
+                        <div class="day-column">
+                            <div class="day-header">週二</div>
+                            <div class="time-slot">09:00</div>
+                            <div class="time-slot booked">10:00<br>陳同學</div>
+                            <div class="time-slot">14:00</div>
+                            <div class="time-slot available">16:00</div>
+                            <div class="time-slot booked">18:00<br>李同學</div>
+                        </div>
+                        <div class="day-column">
+                            <div class="day-header">週三</div>
+                            <div class="time-slot available">09:00</div>
+                            <div class="time-slot">10:00</div>
+                            <div class="time-slot">14:00</div>
+                            <div class="time-slot">16:00</div>
+                            <div class="time-slot booked">18:00<br>林同學</div>
+                        </div>
+                        <div class="day-column">
+                            <div class="day-header">週四</div>
+                            <div class="time-slot booked">09:00<br>黃同學</div>
+                            <div class="time-slot">10:00</div>
+                            <div class="time-slot available">14:00</div>
+                            <div class="time-slot">16:00</div>
+                            <div class="time-slot">18:00</div>
+                        </div>
+                        <div class="day-column">
+                            <div class="day-header">週五</div>
+                            <div class="time-slot">09:00</div>
+                            <div class="time-slot available">10:00</div>
+                            <div class="time-slot booked">14:00<br>周同學</div>
+                            <div class="time-slot">16:00</div>
+                            <div class="time-slot available">18:00</div>
+                        </div>
+                        <div class="day-column">
+                            <div class="day-header">週六</div>
+                            <div class="time-slot available">09:00</div>
+                            <div class="time-slot">10:00</div>
+                            <div class="time-slot">14:00</div>
+                            <div class="time-slot booked">16:00<br>吳同學</div>
+                            <div class="time-slot">18:00</div>
+                        </div>
+                        <div class="day-column">
+                            <div class="day-header">週日</div>
+                            <div class="time-slot">09:00</div>
+                            <div class="time-slot">10:00</div>
+                            <div class="time-slot available">14:00</div>
+                            <div class="time-slot">16:00</div>
+                            <div class="time-slot available">18:00</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>為您推薦的學生</h2>
+                    
+                    <div class="recommended-students">
+                        <div class="student-card">
+                            <div class="student-card-avatar">陳</div>
+                            <div class="student-card-details">
+                                <div class="student-card-name">陳同學</div>
+                                <div class="student-card-grade">高中一年級 | 數學</div>
+                            </div>
+                            <div class="student-card-actions">
+                                <button class="student-btn view">查看</button>
+                                <button class="student-btn message">訊息</button>
+                            </div>
+                        </div>
+                        
+                        <div class="student-card">
+                            <div class="student-card-avatar">林</div>
+                            <div class="student-card-details">
+                                <div class="student-card-name">林同學</div>
+                                <div class="student-card-grade">國中三年級 | 數學</div>
+                            </div>
+                            <div class="student-card-actions">
+                                <button class="student-btn view">查看</button>
+                                <button class="student-btn message">訊息</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智多多 - 教師匹配需求</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: #f7fafc;
+            color: #333;
+            line-height: 1.6;
+            background-image: linear-gradient(120deg, #f5f7fa 0%, #e4eef9 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .content-box {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 10px 25px rgba(49, 75, 212, 0.12);
+            width: 720px;
+            padding: 40px;
+            margin: 30px auto;
+        }
+        
+        h1, h2, h3 {
+            color: #2d3748;
+            font-weight: 700;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            margin-bottom: 30px;
+        }
+        
+        .back-button {
+            background: #f8fafc;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: #e2e8f0;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            margin-top: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            background-color: #f8fafc;
+        }
+        
+        .form-control:focus {
+            border-color: #4285f4;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.15);
+        }
+        
+        label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #4a5568;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .dropdown {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            margin-top: 8px;
+            background: #f8fafc;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+        
+        .dropdown:focus {
+            border-color: #4285f4;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.15);
+        }
+        
+        .btn {
+            padding: 14px 24px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            font-size: 16px;
+            letter-spacing: 0.3px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4285f4, #3b5fe2);
+            color: white;
+        }
+        
+        /* Decorative elements for modern feel */
+        .container:before {
+            content: "";
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, rgba(147, 112, 219, 0.2), rgba(66, 133, 244, 0.2));
+            border-radius: 50%;
+            top: -100px;
+            left: -100px;
+            z-index: -1;
+        }
+        
+        .container:after {
+            content: "";
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(255, 122, 89, 0.15), rgba(255, 82, 82, 0.15));
+            border-radius: 50%;
+            bottom: -50px;
+            right: -50px;
+            z-index: -1;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .helper-text {
+            font-size: 14px;
+            color: #718096;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content-box">
+            <div class="navbar">
+                <button class="back-button">←</button>
+                <h2>教師匹配需求</h2>
+                <div></div>
+            </div>
+            
+            <form>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="teacher_name">姓名</label>
+                        <input type="text" id="teacher_name" class="form-control" placeholder="請輸入您的姓名">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="teacher_gender">性別</label>
+                        <select id="teacher_gender" class="dropdown">
+                            <option value="">請選擇性別</option>
+                            <option value="male">男</option>
+                            <option value="female">女</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="teacher_region">地區</label>
+                        <select id="teacher_region" class="dropdown">
+                            <option value="">請選擇地區</option>
+                            <option value="taipei">台北市</option>
+                            <option value="newtaipei">新北市</option>
+                            <option value="taoyuan">桃園市</option>
+                            <option value="other">其他地區</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="teacher_subject">授課科目</label>
+                        <select id="teacher_subject" class="dropdown">
+                            <option value="">請選擇科目</option>
+                            <option value="math">數學</option>
+                            <option value="english">英文</option>
+                            <option value="science">自然科學</option>
+                            <option value="other">其他科目</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="teacher_price">基本時薪</label>
+                    <input type="number" id="teacher_price" class="form-control" placeholder="請輸入您的基本時薪">
+                    <p class="helper-text">您可在註冊後設定動態定價</p>
+                </div>
+                
+                <div class="section-divider"></div>
+                <h3 class="section-title">教育與經驗</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="teacher_edu">學歷背景</label>
+                        <input type="text" id="teacher_edu" class="form-control" placeholder="請輸入您的最高學歷">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="teacher_exp">教學經驗</label>
+                        <input type="number" id="teacher_exp" class="form-control" placeholder="請輸入教學年資">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="teacher_specialty">教學專長</label>
+                    <textarea id="teacher_specialty" class="form-control" rows="3" placeholder="請簡述您的教學專長與優勢"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="teacher_availability">可授課時段</label>
+                    <select id="teacher_availability" class="dropdown">
+                        <option value="">請選擇常用授課時段</option>
+                        <option value="weekday_morning">平日上午</option>
+                        <option value="weekday_afternoon">平日下午</option>
+                        <option value="weekday_evening">平日晚上</option>
+                        <option value="weekend">週末整天</option>
+                        <option value="flexible">彈性時間</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>願意接受遠距教學</label>
+                    <div class="radio-group">
+                        <label class="radio">
+                            <input type="radio" name="remote" value="yes"> 是
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="remote" value="no"> 否
+                        </label>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" style="width: 100%; margin-top: 20px;">提交需求</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

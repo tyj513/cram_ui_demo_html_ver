@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智多多 - 設定動態定價</title>
+    <style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    background-color: #f7fafc;
+    color: #333;
+    line-height: 1.6;
+    background-image: linear-gradient(120deg, #f5f7fa 0%, #e4eef9 100%);
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.content-box {
+    background: white;
+    border-radius: 28px;
+    box-shadow: 0 10px 25px rgba(49, 75, 212, 0.12);
+    width: 90%;
+    max-width: 800px;
+    padding: 40px;
+    margin: 30px auto;
+}
+
+h1, h2, h3 {
+    color: #2d3748;
+    font-weight: 700;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 30px;
+}
+
+.back-button {
+    background: #f8fafc;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.back-button:hover {
+    background: #e2e8f0;
+}
+
+.info-panel {
+    display: flex;
+    background: #e3f2fd;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 30px;
+    align-items: flex-start;
+}
+
+.info-icon {
+    margin-right: 16px;
+    margin-top: 2px;
+}
+
+.info-text {
+    font-size: 15px;
+    color: #2c5282;
+    line-height: 1.5;
+}
+
+.form-group {
+    margin-bottom: 28px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    margin-top: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    background-color: #f8fafc;
+}
+
+.form-control:focus {
+    border-color: #4285f4;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.15);
+}
+
+label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #4a5568;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.dropdown {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    margin-top: 8px;
+    background: #f8fafc;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+.section-divider {
+    border-top: 1px solid #e2e8f0;
+    margin: 32px 0 24px;
+}
+
+.section-title {
+    font-size: 18px;
+    color: #2d3748;
+    margin-bottom: 20px;
+}
+
+.preview-price {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #4a5568;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.preview-price .price {
+    font-weight: 600;
+    color: #4285f4;
+    margin-left: 4px;
+}
+
+.helper-text {
+    font-size: 14px;
+    color: #718096;
+    margin-top: 4px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 40px;
+}
+
+.btn {
+    padding: 14px 24px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-size: 16px;
+    letter-spacing: 0.3px;
+    flex: 1;
+    text-align: center;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #4285f4, #3b5fe2);
+    color: white;
+}
+
+.btn-secondary {
+    background: #f8fafc;
+    color: #4a5568;
+    border: 1px solid #e2e8f0;
+}
+
+/* Decorative elements for modern feel */
+.container:before {
+    content: "";
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(135deg, rgba(147, 112, 219, 0.2), rgba(66, 133, 244, 0.2));
+    border-radius: 50%;
+    top: -100px;
+    left: -100px;
+    z-index: -1;
+}
+
+.container:after {
+    content: "";
+    position: fixed;
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, rgba(255, 122, 89, 0.15), rgba(255, 82, 82, 0.15));
+    border-radius: 50%;
+    bottom: -50px;
+    right: -50px;
+    z-index: -1;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content-box">
+            <div class="navbar">
+                <button class="back-button">←</button>
+                <h2>設定動態定價</h2>
+                <div></div>
+            </div>
+            
+            <div class="info-panel">
+                <div class="info-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#4285F4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 16V12" stroke="#4285F4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 8H12.01" stroke="#4285F4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="info-text">
+                    <p><strong>動態定價說明：</strong>您可以根據不同條件設定不同的課程價格，提高競爭力與收益。系統會自動計算最終價格並展示給學生。</p>
+                </div>
+            </div>
+            
+            <form>
+                <div class="form-group">
+                    <label>基本時薪</label>
+                    <input type="text" class="form-control" value="600" placeholder="請輸入您的基本時薪">
+                    <p class="helper-text">這是您的標準課程價格（元/小時）</p>
+                </div>
+                
+                <div class="section-divider"></div>
+                <h3 class="section-title">時段價格調整</h3>
+                
+                <div class="form-group">
+                    <label>平日白天 (9:00-17:00)</label>
+                    <select class="dropdown">
+                        <option>基本價格</option>
+                        <option>-20%</option>
+                        <option>-10%</option>
+                        <option>+10%</option>
+                        <option>+20%</option>
+                    </select>
+                    <div class="preview-price">
+                        <span>預覽價格: </span>
+                        <span class="price">600 元/小時</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>平日晚上 (17:00-22:00)</label>
+                    <select class="dropdown">
+                        <option>+20%</option>
+                        <option>基本價格</option>
+                        <option>-10%</option>
+                        <option>+10%</option>
+                    </select>
+                    <div class="preview-price">
+                        <span>預覽價格: </span>
+                        <span class="price">720 元/小時</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>週末及假日</label>
+                    <select class="dropdown">
+                        <option>+30%</option>
+                        <option>基本價格</option>
+                        <option>+10%</option>
+                        <option>+20%</option>
+                    </select>
+                    <div class="preview-price">
+                        <span>預覽價格: </span>
+                        <span class="price">780 元/小時</span>
+                    </div>
+                </div>
+                
+                <div class="section-divider"></div>
+                <h3 class="section-title">學生類型調整</h3>
+                
+                <div class="form-group">
+                    <label>長期學生 (超過3個月)</label>
+                    <select class="dropdown">
+                        <option>-10%</option>
+                        <option>基本價格</option>
+                        <option>-20%</option>
+                        <option>-5%</option>
+                    </select>
+                    <div class="preview-price">
+                        <span>預覽價格: </span>
+                        <span class="price">540 元/小時</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>團體課 (2-3人)</label>
+                    <select class="dropdown">
+                        <option>每人-20%</option>
+                        <option>每人基本價格</option>
+                        <option>每人-10%</option>
+                    </select>
+                    <div class="preview-price">
+                        <span>預覽價格: </span>
+                        <span class="price">480 元/人/小時</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>特殊需求學生</label>
+                    <select class="dropdown">
+                        <option>+15%</option>
+                        <option>基本價格</option>
+                        <option>+10%</option>
+                        <option>+20%</option>
+                    </select>
+                    <div class="preview-price">
+                        <span>預覽價格: </span>
+                        <span class="price">690 元/小時</span>
+                    </div>
+                </div>
+                
+                <div class="section-divider"></div>
+                <h3 class="section-title">地區調整</h3>
+                
+                <div class="form-group">
+                    <label>需要交通時間超過30分鐘</label>
+                    <select class="dropdown">
+                        <option>+10%</option>
+                        <option>基本價格</option>
+                        <option>+15%</option>
+                        <option>+20%</option>
+                    </select>
+                    <div class="preview-price">
+                        <span>預覽價格: </span>
+                        <span class="price">660 元/小時</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>線上授課</label>
+                    <select class="dropdown">
+                        <option>-10%</option>
+                        <option>基本價格</option>
+                        <option>-15%</option>
+                        <option>-5%</option>
+                    </select>
+                    <div class="preview-price">
+                        <span>預覽價格: </span>
+                        <span class="price">540 元/小時</span>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-secondary">取消</button>
+                    <button class="btn btn-primary">儲存設定</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

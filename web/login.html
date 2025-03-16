@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智多多 - 登入選擇</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: #f7fafc;
+            color: #333;
+            line-height: 1.6;
+            background-image: linear-gradient(120deg, #f5f7fa 0%, #e4eef9 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .login-box {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 10px 25px rgba(49, 75, 212, 0.12);
+            width: 520px;
+            padding: 40px;
+            margin: 60px auto;
+            text-align: center;
+        }
+        
+        h1, h2 {
+            color: #2d3748;
+            font-weight: 700;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            background: linear-gradient(135deg, #4285f4, #9c27b0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 18px;
+        }
+        
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 30px 0;
+        }
+        
+        .btn {
+            padding: 14px 24px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            font-size: 16px;
+            letter-spacing: 0.3px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4285f4, #3b5fe2);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #f8fafc;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .btn-accent {
+            background: linear-gradient(135deg, #34a853, #2c9a48);
+            color: white;
+        }
+        
+        /* Decorative elements for modern feel */
+        .container:before {
+            content: "";
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, rgba(147, 112, 219, 0.2), rgba(66, 133, 244, 0.2));
+            border-radius: 50%;
+            top: -100px;
+            left: -100px;
+            z-index: -1;
+        }
+        
+        .container:after {
+            content: "";
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(255, 122, 89, 0.15), rgba(255, 82, 82, 0.15));
+            border-radius: 50%;
+            bottom: -50px;
+            right: -50px;
+            z-index: -1;
+        }
+        
+        .logo {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+        }
+        
+        .links {
+            margin-top: 30px;
+            font-size: 16px;
+            color: #718096;
+        }
+        
+        .links a {
+            color: #4285f4;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-box">
+            <div class="header">
+                <h1>智多多</h1>
+                <p>師生智能匹配平台</p>
+                <div class="logo">
+                    <svg width="150" height="150" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="60" cy="60" r="55" fill="#F8FAFC" stroke="url(#paint0_linear)" stroke-width="2"/>
+                        <path d="M44.5 48C38 48 38 56 38 56H51V48H44.5Z" fill="url(#paint1_linear)"/>
+                        <path d="M75.5 48C82 48 82 56 82 56H69V48H75.5Z" fill="url(#paint2_linear)"/>
+                        <path d="M54 62H66V81C59.5 88 54.833 81.333 54 78V62Z" fill="url(#paint3_linear)"/>
+                        <path d="M38 56C38 56 38 64 44.5 64H51V56H38Z" fill="url(#paint4_linear)"/>
+                        <path d="M82 56C82 56 82 64 75.5 64H69V56H82Z" fill="url(#paint5_linear)"/>
+                        <path d="M51 56V64H54V62C54 62 51 56 51 56Z" fill="url(#paint6_linear)"/>
+                        <path d="M69 56V64H66V62C66 62 69 56 69 56Z" fill="url(#paint7_linear)"/>
+                        <defs>
+                            <linearGradient id="paint0_linear" x1="60" y1="5" x2="60" y2="115" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#1424FF"/>
+                                <stop offset="1" stop-color="#9903FF"/>
+                            </linearGradient>
+                            <linearGradient id="paint1_linear" x1="38" y1="48" x2="51" y2="56" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#4285F4"/>
+                                <stop offset="1" stop-color="#3DFEFF"/>
+                            </linearGradient>
+                            <linearGradient id="paint2_linear" x1="82" y1="48" x2="69" y2="56" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#9C27B0"/>
+                                <stop offset="1" stop-color="#FF88DF"/>
+                            </linearGradient>
+                            <linearGradient id="paint3_linear" x1="57" y1="62" x2="63" y2="88" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#4285F4"/>
+                                <stop offset="1" stop-color="#3DFEFF"/>
+                            </linearGradient>
+                            <linearGradient id="paint4_linear" x1="38" y1="56" x2="51" y2="64" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#4285F4"/>
+                                <stop offset="1" stop-color="#3DFEFF"/>
+                            </linearGradient>
+                            <linearGradient id="paint5_linear" x1="82" y1="56" x2="69" y2="64" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#9C27B0"/>
+                                <stop offset="1" stop-color="#FF88DF"/>
+                            </linearGradient>
+                            <linearGradient id="paint6_linear" x1="51.5" y1="56" x2="51.5" y2="64" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#4285F4"/>
+                                <stop offset="1" stop-color="#3DFEFF"/>
+                            </linearGradient>
+                            <linearGradient id="paint7_linear" x1="68.5" y1="56" x2="68.5" y2="64" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#9C27B0"/>
+                                <stop offset="1" stop-color="#FF88DF"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="login-container">
+                <button class="btn btn-primary">學生登入</button>
+                <button class="btn btn-secondary">教師登入</button>
+                <button class="btn btn-accent">管理員登入</button>
+            </div>
+            
+            <div class="links">
+                還沒有帳號？<a href="#">立即註冊</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
