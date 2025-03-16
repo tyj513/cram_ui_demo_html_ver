@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduMatch App UI Design</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: #f7fafc;
+            color: #333;
+            line-height: 1.6;
+            background-image: linear-gradient(120deg, #f5f7fa 0%, #e4eef9 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        h1, h2, h3 {
+            color: #2d3748;
+            font-weight: 700;
+        }
+        
+        .screens {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin: 40px 0;
+            justify-content: center;
+        }
+        
+        .screen {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 10px 25px rgba(49, 75, 212, 0.12);
+            width: 340px;
+            height: 680px;
+            padding: 20px;
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: #e2e8f0 transparent;
+        }
+        
+        .screen::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .screen::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .screen::-webkit-scrollbar-thumb {
+            background-color: #e2e8f0;
+            border-radius: 20px;
+        }
+        
+        /* Decorative elements for modern feel */
+        .container:before {
+            content: "";
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, rgba(147, 112, 219, 0.2), rgba(66, 133, 244, 0.2));
+            border-radius: 50%;
+            top: -100px;
+            left: -100px;
+            z-index: -1;
+        }
+        
+        .container:after {
+            content: "";
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(255, 122, 89, 0.15), rgba(255, 82, 82, 0.15));
+            border-radius: 50%;
+            bottom: -50px;
+            right: -50px;
+            z-index: -1;
+        }
+        
+        .screen-title {
+            font-size: 14px;
+            text-align: center;
+            color: #718096;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            background: linear-gradient(135deg, #4285f4, #9c27b0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 16px;
+        }
+        
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 30px 0;
+        }
+        
+        .btn {
+            padding: 14px 24px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            font-size: 16px;
+            letter-spacing: 0.3px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4285f4, #3b5fe2);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #f8fafc;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .btn-accent {
+            background: linear-gradient(135deg, #34a853, #2c9a48);
+            color: white;
+        }
+        
+        .btn-ai {
+            background: linear-gradient(135deg, #9c27b0, #8e24aa);
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            margin-top: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            background-color: #f8fafc;
+        }
+        
+        .form-control:focus {
+            border-color: #4285f4;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.15);
+        }
+        
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4a5568;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .profile-card {
+            border: none;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            background: #fff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .profile-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4285f4, #3b5fe2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 22px;
+            box-shadow: 0 4px 10px rgba(66, 133, 244, 0.25);
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 4px;
+            color: #2d3748;
+        }
+        
+        .profile-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+        
+        .profile-tag {
+            background: #f1f7ff;
+            padding: 6px 12px;
+            border-radius: 18px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #4285f4;
+            border: 1px solid rgba(66, 133, 244, 0.2);
+        }
+        
+        .reason-badge {
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
+            color: #92400e;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-top: 16px;
+            font-size: 14px;
+            position: relative;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 24px;
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 4px;
+        }
+        
+        .tab {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-radius: 12px;
+            font-weight: 500;
+            text-align: center;
+            flex: 1;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .tab.active {
+            background: #fff;
+            color: #4285f4;
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .filter-options {
+            margin-bottom: 24px;
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .matching-buttons {
+            display: flex;
+            gap: 12px;
+            margin: 24px 0;
+        }
+        
+        .dropdown {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            margin-top: 8px;
+            background: #f8fafc;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            margin-bottom: 24px;
+        }
+        
+        .back-button {
+            background: #f8fafc;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: #e2e8f0;
+        }
+        
+        .matching-type {
+            background: linear-gradient(135deg, #e3f2fd, #d4e6fc);
+            color: #2c74e9;
+            padding: 6px 12px;
+            border-radius: 18px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 5px rgba(66, 133, 244, 0.15);
+        }
+        
+        .ai-matching {
+            background: linear-gradient(135deg, #f3e5f5, #ebdbf0);
+            color: #9c0eb0;
+            box-shadow: 0 2px 5px rgba(156, 39, 176, 0.15);
+        }
+	.btn-container {
+            margin-top: 20px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            text-decoration: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>智多多 App UI Design</h1>
+        <p>師生匹配系統 UI 介面設計</p> 
+ 
+    
+        <div class="screens">
+            <!-- 登入選擇畫面 -->
+            <div class="screen">
+                <div class="screen-title">登入選擇畫面</div>
+                <div class="header">
+                    <h1>智多多</h1>
+                    <p>師生智能匹配平台</p>
+                    <div style="margin-top: 20px;">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9IjYwIiBjeT0iNjAiIHI9IjU1IiBmaWxsPSIjRjhGQUZDIiBzdHJva2U9InVybCgjcGFpbnQwX2xpbmVhcikiIHN0cm9rZS13aWR0aD0iMiIvPgo8cGF0aCBkPSJNNDQuNSA0OEMzOCA0OCAzOCA1NiAzOCA1Nkg1MVY0OEg0NC41WiIgZmlsbD0idXJsKCNwYWludDFfbGluZWFyKSIvPgo8cGF0aCBkPSJNNzUuNSA0OEM4MiA0OCA4MiA1NiA4MiA1Nkg2OVY0OEg3NS41WiIgZmlsbD0idXJsKCNwYWludDJfbGluZWFyKSIvPgo8cGF0aCBkPSJNNTQgNjJINjZWODFDNTkuNSA4OCA1NC44MzMgODEuMzMzIDU0IDc4VjYyWiIgZmlsbD0idXJsKCNwYWludDNfbGluZWFyKSIvPgo8cGF0aCBkPSJNMzggNTZDMzggNTYgMzggNjQgNDQuNSA2NEg1MVY1NkgzOFoiIGZpbGw9InVybCgjcGFpbnQ0X2xpbmVhcikiLz4KPHBhdGggZD0iTTgyIDU2QzgyIDU2IDgyIDY0IDc1LjUgNjRINjlWNTZIODJaIiBmaWxsPSJ1cmwoI3BhaW50NV9saW5lYXIpIi8+CjxwYXRoIGQ9Ik01MSA1NlY2NEg1NFY2SDVpQzU0IDYyIDUxIDU2IDUxIDU2WiIgZmlsbD0idXJsKCNwYWludDZfbGluZWFyKSIvPgo8cGF0aCBkPSJNNjkgNTZWNjRINjZWNjJDNjYgNjIgNjkgNTYgNjkgNTZaIiBmaWxsPSJ1cmwoI3BhaW50N19saW5lYXIpIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MF9saW5lYXIiIHgxPSI2MCIgeTE9IjUiIHgyPSI2MCIgeTI9IjExNSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjMTQyNEZGIi8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzk5MDNGRiIvPgo8L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MV9saW5lYXIiIHgxPSIzOCIgeTE9IjQ4IiB4Mj0iNTEiIHkyPSI1NiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjNDI4NUY0Ii8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzNERkVGRiIvPgo8L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50Ml9saW5lYXIiIHgxPSI4MiIgeTE9IjQ4IiB4Mj0iNjkiIHkyPSI1NiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjOUMyN0IwIi8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0ZGODhERiIvPgo8L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50M19saW5lYXIiIHgxPSI1NyIgeTE9IjYyIiB4Mj0iNjMiIHkyPSI4OCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjNDI4NUY0Ii8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzNERkVGRiIvPgo8L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50NF9saW5lYXIiIHgxPSIzOCIgeTE9IjU2IiB4Mj0iNTEiIHkyPSI2NCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjNDI4NUY0Ii8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzNERkVGRiIvPgo8L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50NV9saW5lYXIiIHgxPSI4MiIgeTE9IjU2IiB4Mj0iNjkiIHkyPSI2NCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjOUMyN0IwIi8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0ZGODhERiIvPgo8L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50Nl9saW5lYXIiIHgxPSI1MS41IiB5MT0iNTYiIHgyPSI1MS41IiB5Mj0iNjQiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzQyODVGNCIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMzREZFRkYiLz4KPC9saW5lYXJHcmFkaWVudD4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDdfbGluZWFyIiB4MT0iNjguNSIgeTE9IjU2IiB4Mj0iNjguNSIgeTI9IjY0IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiM5QzI3QjAiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRkY4OERGIi8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPC9zdmc+Cg==" alt="EduMatch Logo" style="width: 120px; height: 120px;">
+                    </div>
+                </div>
+                
+                <div class="login-container">
+                    <button class="btn btn-primary">學生登入</button>
+                    <button class="btn btn-secondary">教師登入</button>
+                    <button class="btn btn-accent">管理員登入</button>
+                </div>
+                
+                <p style="text-align: center; margin-top: 30px; font-size: 14px; color: #888;">
+                    還沒有帳號？<a href="#" style="color: #4285f4;">立即註冊</a>
+                </p>
+            </div>
+            
+            <!-- 註冊畫面 (學生) -->
+            <div class="screen">
+                <div class="screen-title">註冊畫面 (學生)</div>
+                <div class="navbar">
+                    <button class="back-button">←</button>
+                    <h2>學生註冊</h2>
+                    <div></div>
+                </div>
+                
+                <form>
+                    <div class="form-group">
+                        <label for="name">姓名</label>
+                        <input type="text" id="name" class="form-control" placeholder="請輸入您的姓名">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="gender">性別</label>
+                        <select id="gender" class="dropdown">
+                            <option value="">請選擇性別</option>
+                            <option value="male">男</option>
+                            <option value="female">女</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="region">地區</label>
+                        <select id="region" class="dropdown">
+                            <option value="">請選擇地區</option>
+                            <option value="taipei">台北市</option>
+                            <option value="newtaipei">新北市</option>
+                            <option value="taoyuan">桃園市</option>
+                            <option value="other">其他地區</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">尋找科目</label>
+                        <select id="subject" class="dropdown">
+                            <option value="">請選擇科目</option>
+                            <option value="math">數學</option>
+                            <option value="english">英文</option>
+                            <option value="science">自然科學</option>
+                            <option value="other">其他科目</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="price">預算範圍 (每小時)</label>
+                        <select id="price" class="dropdown">
+                            <option value="">請選擇預算範圍</option>
+                            <option value="300-500">300-500 元</option>
+                            <option value="500-800">500-800 元</option>
+                            <option value="800-1200">800-1200 元</option>
+                            <option value="1200+">1200 元以上</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 20px;">註冊</button>
+                </form>
+            </div>
+            
+            <!-- 註冊畫面 (教師) -->
+            <div class="screen">
+                <div class="screen-title">註冊畫面 (教師)</div>
+                <div class="navbar">
+                    <button class="back-button">←</button>
+                    <h2>教師註冊</h2>
+                    <div></div>
+                </div>
+                
+                <form>
+                    <div class="form-group">
+                        <label for="teacher_name">姓名</label>
+                        <input type="text" id="teacher_name" class="form-control" placeholder="請輸入您的姓名">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="teacher_gender">性別</label>
+                        <select id="teacher_gender" class="dropdown">
+                            <option value="">請選擇性別</option>
+                            <option value="male">男</option>
+                            <option value="female">女</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="teacher_region">地區</label>
+                        <select id="teacher_region" class="dropdown">
+                            <option value="">請選擇地區</option>
+                            <option value="taipei">台北市</option>
+                            <option value="newtaipei">新北市</option>
+                            <option value="taoyuan">桃園市</option>
+                            <option value="other">其他地區</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="teacher_subject">授課科目</label>
+                        <select id="teacher_subject" class="dropdown">
+                            <option value="">請選擇科目</option>
+                            <option value="math">數學</option>
+                            <option value="english">英文</option>
+                            <option value="science">自然科學</option>
+                            <option value="other">其他科目</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="teacher_price">基本時薪</label>
+                        <input type="number" id="teacher_price" class="form-control" placeholder="請輸入您的基本時薪">
+                        <p style="font-size: 12px; color: #666; margin-top: 5px;">您可在註冊後設定動態定價</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="teacher_edu">學歷背景</label>
+                        <input type="text" id="teacher_edu" class="form-control" placeholder="請輸入您的最高學歷">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="teacher_exp">教學經驗</label>
+                        <input type="number" id="teacher_exp" class="form-control" placeholder="請輸入教學年資">
+                    </div>
+                    
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 20px;">註冊</button>
+                </form>
+            </div>
+
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			<!-- 一般匹配結果畫面 (學生) --> 
+            <div class="screen">
+                <div class="screen-title">匹配畫面 (教師)</div>
+                <div class="navbar">
+                    <div></div>
+                    <h2>尋找老師</h2>
+                    <button class="btn-secondary" style="padding: 5px 10px; font-size: 12px;">篩選</button>
+                </div>
+                
+                <div class="matching-buttons">
+                    <button class="btn  btn-ai" style="flex: 1;">一般匹配</button>
+                    <button class="btn btn-secondary"  style="flex: 1;">AI 智能匹配</button>
+                </div>
+					
+				<div class="filter-options">
+					<div style="display: flex; gap: 10px; margin-bottom: 10px;">
+						<select class="dropdown" style="flex: 1;">
+							<option>科目: 數學</option>
+							<option>全部科目</option>
+						</select>
+						<select class="dropdown" style="flex: 1;">
+							<option>地區: 全部</option>
+							<option>台北市</option>
+							<option>新北市</option>
+						</select>
+					</div>
+					<div style="display: flex; gap: 10px;">
+						<select class="dropdown" style="flex: 1;">
+							<option>價格: 500-800元</option>
+							<option>全部價格</option>
+						</select>
+						<select class="dropdown" style="flex: 1;">
+							<option>排序: 評分高至低</option>
+							<option>價格低至高</option>
+						</select>
+					</div>
+				</div>
+				
+				<div class="results">
+					<div class="profile-card">
+						<span class="matching-type" style="background: #e8f0fe; color: #4285f4;">一般匹配</span>
+						
+						<div class="profile-header">
+							<div class="profile-avatar">林</div>
+							<div class="profile-info">
+								<div class="profile-name">林老師</div>
+								<div style="font-size: 14px; color: #666;">數學 | 新北市</div>
+							</div>
+						</div>
+						
+						<div class="profile-details">
+							<span class="profile-tag">3年經驗</span>
+							<span class="profile-tag">500元/小時</span>
+							<span class="profile-tag">國立師範大學</span>
+						</div>
+					</div>
+					
+					<div class="profile-card">
+						<div class="profile-header">
+							<div class="profile-avatar">陳</div>
+							<div class="profile-info">
+								<div class="profile-name">陳老師</div>
+								<div style="font-size: 14px; color: #666;">數學 | 台北市</div>
+							</div>
+						</div>
+						
+						<div class="profile-details">
+							<span class="profile-tag">7年經驗</span>
+							<span class="profile-tag">700元/小時</span>
+							<span class="profile-tag">國立清華大學</span>
+						</div>
+					</div>
+					
+					<div class="profile-card">
+						<div class="profile-header">
+							<div class="profile-avatar">黃</div>
+							<div class="profile-info">
+								<div class="profile-name">黃老師</div>
+								<div style="font-size: 14px; color: #666;">數學 | 台北市</div>
+							</div>
+						</div>
+						
+						<div class="profile-details">
+							<span class="profile-tag">2年經驗</span>
+							<span class="profile-tag">600元/小時</span>
+							<span class="profile-tag">國立中央大學</span>
+						</div>
+					</div>
+					
+					<div class="profile-card">
+						<div class="profile-header">
+							<div class="profile-avatar">李</div>
+							<div class="profile-info">
+								<div class="profile-name">李老師</div>
+								<div style="font-size: 14px; color: #666;">數學 | 台北市</div>
+							</div>
+						</div>
+						
+						<div class="profile-details">
+							<span class="profile-tag">5年經驗</span>
+							<span class="profile-tag">650元/小時</span>
+							<span class="profile-tag">國立成功大學</span>
+						</div>
+					</div>
+				</div>
+			</div>	
+			
+			
+			
+			
+			
+				 
+				 
+		            
+            <!-- 匹配畫面 (學生) -->
+            <div class="screen">
+                <div class="screen-title">匹配畫面 (學生)</div>
+                <div class="navbar">
+                    <div></div>
+                    <h2>尋找老師</h2>
+                    <button class="btn-secondary" style="padding: 5px 10px; font-size: 12px;">篩選</button>
+                </div>
+                
+                <div class="matching-buttons">
+                    <button class="btn btn-secondary" style="flex: 1;">一般匹配</button>
+                    <button class="btn btn-ai" style="flex: 1;">AI 智能匹配</button>
+                </div>
+                
+                <div class="results">
+                    <div class="profile-card">
+                        <span class="matching-type ai-matching">AI 智能推薦</span>
+                        
+                        <div class="profile-header">
+                            <div class="profile-avatar">張</div>
+                            <div class="profile-info">
+                                <div class="profile-name">張老師</div>
+                                <div style="font-size: 14px; color: #666;">數學 | 台北市</div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-details">
+                            <span class="profile-tag">5年經驗</span>
+                            <span class="profile-tag">600元/小時</span>
+                            <span class="profile-tag">國立台灣大學</span>
+                        </div>
+                        
+                        <div class="reason-badge">
+                            <strong>匹配理由:</strong> 根據您的學習風格和預算範圍，張老師的教學方法最適合您，並且有很好的數學成績提升記錄。
+                        </div>
+                    </div>
+                    
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <div class="profile-avatar">林</div>
+                            <div class="profile-info">
+                                <div class="profile-name">林老師</div>
+                                <div style="font-size: 14px; color: #666;">數學 | 新北市</div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-details">
+                            <span class="profile-tag">3年經驗</span>
+                            <span class="profile-tag">500元/小時</span>
+                            <span class="profile-tag">國立師範大學</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+				 
+				 
+				 
+				 
+				 
+				<!-- 一般匹配結果畫面 (教師) --> 
+            <div class="screen">
+                <div class="screen-title">匹配畫面 (教師)</div>
+                <div class="navbar">
+                    <div></div>
+                    <h2>尋找學生</h2>
+                    <button class="btn-secondary" style="padding: 5px 10px; font-size: 12px;">篩選</button>
+                </div>
+                
+                <div class="matching-buttons">
+                    <button class="btn btn-ai" style="flex: 1;">一般匹配</button>
+                    <button class="btn btn-secondary" style="flex: 1;">AI 智能匹配</button>
+                </div>
+					
+					<div class="filter-options">
+						<div style="display: flex; gap: 10px; margin-bottom: 10px;">
+							<select class="dropdown" style="flex: 1;">
+								<option>年級: 全部</option>
+								<option>國中</option>
+								<option>高中</option>
+							</select>
+							<select class="dropdown" style="flex: 1;">
+								<option>地區: 全部</option>
+								<option>台北市</option>
+								<option>新北市</option>
+							</select>
+						</div>
+						<div style="display: flex; gap: 10px;">
+							<select class="dropdown" style="flex: 1;">
+								<option>預算: 全部</option>
+								<option>500-800元</option>
+								<option>800元以上</option>
+							</select>
+							<select class="dropdown" style="flex: 1;">
+								<option>排序: 最新加入</option>
+								<option>預算高至低</option>
+							</select>
+						</div>
+					</div>
+					
+					<div class="results">
+						<div class="profile-card">
+							<span class="matching-type" style="background: #e8f0fe; color: #4285f4;">一般匹配</span>
+							
+							<div class="profile-header">
+								<div class="profile-avatar">王</div>
+								<div class="profile-info">
+									<div class="profile-name">王同學</div>
+									<div style="font-size: 14px; color: #666;">數學 | 台北市</div>
+								</div>
+							</div>
+							
+							<div class="profile-details">
+								<span class="profile-tag">高中二年級</span>
+								<span class="profile-tag">預算: 600元/小時</span>
+								<span class="profile-tag">週末可上課</span>
+							</div>
+						</div>
+						
+						<div class="profile-card">
+							<div class="profile-header">
+								<div class="profile-avatar">李</div>
+								<div class="profile-info">
+									<div class="profile-name">李同學</div>
+									<div style="font-size: 14px; color: #666;">數學 | 台北市</div>
+								</div>
+							</div>
+							
+							<div class="profile-details">
+								<span class="profile-tag">國中三年級</span>
+								<span class="profile-tag">預算: 500元/小時</span>
+								<span class="profile-tag">平日晚上可上課</span>
+							</div>
+						</div>
+						
+						<div class="profile-card">
+							<div class="profile-header">
+								<div class="profile-avatar">張</div>
+								<div class="profile-info">
+									<div class="profile-name">張同學</div>
+									<div style="font-size: 14px; color: #666;">數學 | 新北市</div>
+								</div>
+							</div>
+							
+							<div class="profile-details">
+								<span class="profile-tag">高中一年級</span>
+								<span class="profile-tag">預算: 700元/小時</span>
+								<span class="profile-tag">週末可上課</span>
+							</div>
+						</div>
+						
+						<div class="profile-card">
+							<div class="profile-header">
+								<div class="profile-avatar">林</div>
+								<div class="profile-info">
+									<div class="profile-name">林同學</div>
+									<div style="font-size: 14px; color: #666;">數學 | 台北市</div>
+								</div>
+							</div>
+							
+							<div class="profile-details">
+								<span class="profile-tag">國中二年級</span>
+								<span class="profile-tag">預算: 550元/小時</span>
+								<span class="profile-tag">課後時間可上課</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+            <!-- 匹配畫面 (教師) -->
+            <div class="screen">
+                <div class="screen-title">匹配畫面 (教師)</div>
+                <div class="navbar">
+                    <div></div>
+                    <h2>尋找學生</h2>
+                    <button class="btn-secondary" style="padding: 5px 10px; font-size: 12px;">篩選</button>
+                </div>
+                
+                <div class="matching-buttons">
+                    <button class="btn btn-secondary" style="flex: 1;">一般匹配</button>
+                    <button class="btn btn-ai" style="flex: 1;">AI 智能匹配</button>
+                </div>
+                
+                <div class="results">
+                    <div class="profile-card">
+                        <span class="matching-type ai-matching">AI 智能推薦</span>
+                        
+                        <div class="profile-header">
+                            <div class="profile-avatar">王</div>
+                            <div class="profile-info">
+                                <div class="profile-name">王同學</div>
+                                <div style="font-size: 14px; color: #666;">數學 | 台北市</div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-details">
+                            <span class="profile-tag">高中二年級</span>
+                            <span class="profile-tag">預算: 600元/小時</span>
+                            <span class="profile-tag">週末可上課</span>
+                        </div>
+                        
+                        <div class="reason-badge">
+                            <strong>匹配理由:</strong> 王同學的學習需求與您的教學專長高度匹配，且您過去教導的學生與王同學有相似的學習模式。
+                        </div>
+                    </div>
+                    
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <div class="profile-avatar">李</div>
+                            <div class="profile-info">
+                                <div class="profile-name">李同學</div>
+                                <div style="font-size: 14px; color: #666;">數學 | 台北市</div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-details">
+                            <span class="profile-tag">國中三年級</span>
+                            <span class="profile-tag">預算: 500元/小時</span>
+                            <span class="profile-tag">平日晚上可上課</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+    
+			
+			
+			
+					 
+				 
+				 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+			
+			
+			
+
+            <!-- 老師動態定價畫面 -->
+            <div class="screen">
+                <div class="screen-title">老師動態定價畫面</div>
+                <div class="navbar">
+                    <button class="back-button">←</button>
+                    <h2>設定動態定價</h2>
+                    <div></div>
+                </div>
+                
+                <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <p style="font-size: 14px; margin-bottom: 10px;">
+                        <strong>動態定價說明：</strong>您可以根據不同條件設定不同的課程價格，提高競爭力與收益。
+                    </p>
+                </div>
+                
+                <form>
+                    <div class="form-group">
+                        <label>基本時薪</label>
+                        <input type="text" class="form-control" value="600" placeholder="請輸入您的基本時薪">
+                        <p style="font-size: 12px; color: #666; margin-top: 5px;">這是您的標準課程價格（元/小時）</p>
+                    </div>
+                    
+                    <div style="border-top: 1px solid #eee; margin: 20px 0; padding-top: 20px;">
+                        <h3 style="margin-bottom: 15px;">時段價格調整</h3>
+                        
+                        <div class="form-group">
+                            <label>平日白天 (9:00-17:00)</label>
+                            <select class="dropdown">
+                                <option>基本價格</option>
+                                <option>-20%</option>
+                                <option>-10%</option>
+                                <option>+10%</option>
+                                <option>+20%</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>平日晚上 (17:00-22:00)</label>
+                            <select class="dropdown">
+                                <option>+20%</option>
+                                <option>基本價格</option>
+                                <option>-10%</option>
+                                <option>+10%</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>週末及假日</label>
+                            <select class="dropdown">
+                                <option>+30%</option>
+                                <option>基本價格</option>
+                                <option>+10%</option>
+                                <option>+20%</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="border-top: 1px solid #eee; margin: 20px 0; padding-top: 20px;">
+                        <h3 style="margin-bottom: 15px;">學生類型調整</h3>
+                        
+                        <div class="form-group">
+                            <label>長期學生 (超過3個月)</label>
+                            <select class="dropdown">
+                                <option>-10%</option>
+                                <option>基本價格</option>
+                                <option>-20%</option>
+                                <option>-5%</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>團體課 (2-3人)</label>
+                            <select class="dropdown">
+                                <option>每人-20%</option>
+                                <option>每人基本價格</option>
+                                <option>每人-10%</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>特殊需求學生</label>
+                            <select class="dropdown">
+                                <option>+15%</option>
+                                <option>基本價格</option>
+                                <option>+10%</option>
+                                <option>+20%</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 30px;">
+                        <button class="btn btn-secondary" style="flex: 1;">取消</button>
+                        <button class="btn btn-primary" style="flex: 1;">儲存設定</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- 管理員畫面 -->
+            <div class="screen">
+                <div class="screen-title">管理員畫面</div>
+                <div class="navbar">
+                    <div></div>
+                    <h2>系統管理</h2>
+                    <div></div>
+                </div>
+                
+                <div class="tabs">
+                    <div class="tab active">用戶管理</div>
+                    <div class="tab">匹配數據</div>
+                    <div class="tab">系統設置</div>
+                </div>
+                
+                <div class="admin-content">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="搜尋用戶...">
+                    </div>
+                    
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <div class="profile-avatar">張</div>
+                            <div class="profile-info">
+                                <div class="profile-name">張老師</div>
+                                <div style="font-size: 14px; color: #666;">數學教師 | 已驗證</div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <button class="btn btn-secondary" style="flex: 1; padding: 8px; font-size: 14px;">查看詳情</button>
+                            <button class="btn btn-primary" style="flex: 1; padding: 8px; font-size: 14px;">編輯資料</button>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <div class="profile-avatar">王</div>
+                            <div class="profile-info">
+                                <div class="profile-name">王同學</div>
+                                <div style="font-size: 14px; color: #666;">學生 | 待驗證</div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <button class="btn btn-secondary" style="flex: 1; padding: 8px; font-size: 14px;">查看詳情</button>
+                            <button class="btn btn-accent" style="flex: 1; padding: 8px; font-size: 14px;">驗證用戶</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			
+			
+			
+			            <!-- 管理員畫面 - 匹配數據 -->
+            <div class="screen">
+                <div class="screen-title">管理員畫面 - 匹配數據</div>
+                <div class="navbar">
+                    <div></div>
+                    <h2>系統管理</h2>
+                    <div></div>
+                </div>
+                
+                <div class="tabs">
+                    <div class="tab">用戶管理</div>
+                    <div class="tab active">匹配數據</div>
+                    <div class="tab">系統設置</div>
+                </div>
+                
+                <div class="admin-content">
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <select class="dropdown" style="flex: 1;">
+                            <option>過去 7 天</option>
+                            <option>過去 30 天</option>
+                            <option>過去 90 天</option>
+                            <option>全部時間</option>
+                        </select>
+                        <select class="dropdown" style="flex: 1;">
+                            <option>所有匹配類型</option>
+                            <option>一般匹配</option>
+                            <option>AI 智能匹配</option>
+                        </select>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 16px; padding: 16px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="text-align: center; flex: 1;">
+                            <div style="font-size: 28px; font-weight: 700; color: #4285f4;">1,248</div>
+                            <div style="font-size: 14px; color: #4a5568;">總匹配次數</div>
+                        </div>
+                        <div style="text-align: center; flex: 1;">
+                            <div style="font-size: 28px; font-weight: 700; color: #9c27b0;">68%</div>
+                            <div style="font-size: 14px; color: #4a5568;">成功率</div>
+                        </div>
+                        <div style="text-align: center; flex: 1;">
+                            <div style="font-size: 28px; font-weight: 700; color: #34a853;">4.8</div>
+                            <div style="font-size: 14px; color: #4a5568;">平均滿意度</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); padding: 16px; margin-bottom: 20px;">
+                        <h3 style="margin-bottom: 10px; color: #2d3748;">匹配趨勢</h3>
+                        <div style="height: 160px; background: linear-gradient(180deg, #e3f2fd 0%, #fff 100%); border-radius: 8px; padding: 16px; position: relative; overflow: hidden;">
+                            <!-- 簡易圖表顯示 -->
+                            <div style="position: absolute; bottom: 30px; left: 0; width: 100%; height: 80px;">
+                                <svg width="100%" height="80" viewBox="0 0 270 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0,70 C15,60 30,40 45,50 C60,60 75,65 90,55 C105,45 120,30 135,25 C150,20 165,35 180,30 C195,25 210,15 225,10 C240,5 255,15 270,20" stroke="#4285f4" stroke-width="3" fill="none" />
+                                    <path d="M0,70 C15,60 30,40 45,50 C60,60 75,65 90,55 C105,45 120,30 135,25 C150,20 165,35 180,30 C195,25 210,15 225,10 C240,5 255,15 270,20 L270,80 L0,80 Z" fill="url(#paint0_linear)" />
+                                    <defs>
+                                        <linearGradient id="paint0_linear" x1="135" y1="10" x2="135" y2="80" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#4285f4" stop-opacity="0.3" />
+                                            <stop offset="1" stop-color="#4285f4" stop-opacity="0" />
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                            <div style="position: absolute; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-between; padding: 8px 0;">
+                                <span style="font-size: 10px; color: #718096;">1月</span>
+                                <span style="font-size: 10px; color: #718096;">2月</span>
+                                <span style="font-size: 10px; color: #718096;">3月</span>
+                                <span style="font-size: 10px; color: #718096;">4月</span>
+                                <span style="font-size: 10px; color: #718096;">5月</span>
+                                <span style="font-size: 10px; color: #718096;">6月</span>
+                                <span style="font-size: 10px; color: #718096;">7月</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); padding: 16px;">
+                        <h3 style="margin-bottom: 10px; color: #2d3748;">熱門匹配</h3>
+                        <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span style="font-weight: 500; color: #2d3748;">數學</span>
+                                <span style="font-weight: 600; color: #4285f4;">32%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 32%; height: 100%; background: linear-gradient(90deg, #4285f4, #3b5fe2);"></div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span style="font-weight: 500; color: #2d3748;">英文</span>
+                                <span style="font-weight: 600; color: #4285f4;">28%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 28%; height: 100%; background: linear-gradient(90deg, #4285f4, #3b5fe2);"></div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span style="font-weight: 500; color: #2d3748;">自然科學</span>
+                                <span style="font-weight: 600; color: #4285f4;">24%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 24%; height: 100%; background: linear-gradient(90deg, #4285f4, #3b5fe2);"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span style="font-weight: 500; color: #2d3748;">其他科目</span>
+                                <span style="font-weight: 600; color: #4285f4;">16%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 16%; height: 100%; background: linear-gradient(90deg, #4285f4, #3b5fe2);"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             
+			 
+			 
+						 
+			 <!-- 管理員畫面 - 系統設置 -->
+			<div class="screen">
+				<div class="screen-title">管理員畫面 - 系統設置</div>
+				<div class="navbar">
+					<div></div>
+					<h2>系統管理</h2>
+					<div></div>
+				</div>
+				
+				<div class="tabs">
+					<div class="tab">用戶管理</div>
+					<div class="tab">匹配數據</div>
+					<div class="tab active">系統設置</div>
+				</div>
+				
+				<div class="admin-content">
+					<div style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); padding: 16px; margin-bottom: 20px;">
+						<h3 style="margin-bottom: 16px; color: #2d3748; display: flex; align-items: center;">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px;">
+								<path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="#4285f4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								<path d="M19.4 15C19.2669 15.3016 19.2272 15.6362 19.286 15.9606C19.3448 16.285 19.4995 16.5843 19.73 16.82L19.79 16.88C19.976 17.0657 20.1235 17.2863 20.2241 17.5291C20.3248 17.7719 20.3766 18.0322 20.3766 18.295C20.3766 18.5578 20.3248 18.8181 20.2241 19.0609C20.1235 19.3037 19.976 19.5243 19.79 19.71C19.6043 19.896 19.3837 20.0435 19.1409 20.1441C18.8981 20.2448 18.6378 20.2966 18.375 20.2966C18.1122 20.2966 17.8519 20.2448 17.6091 20.1441C17.3663 20.0435 17.1457 19.896 16.96 19.71L16.9 19.65C16.6643 19.4195 16.365 19.2648 16.0406 19.206C15.7162 19.1472 15.3816 19.1869 15.08 19.32C14.7842 19.4468 14.532 19.6572 14.3543 19.9255C14.1766 20.1938 14.0813 20.5082 14.08 20.83V21C14.08 21.5304 13.8693 22.0391 13.4942 22.4142C13.1191 22.7893 12.6104 23 12.08 23C11.5496 23 11.0409 22.7893 10.6658 22.4142C10.2907 22.0391 10.08 21.5304 10.08 21V20.91C10.0723 20.579 9.96512 20.258 9.77251 19.9887C9.5799 19.7194 9.31074 19.5143 9 19.4C8.69838 19.2669 8.36381 19.2272 8.03941 19.286C7.71502 19.3448 7.41568 19.4995 7.18 19.73L7.12 19.79C6.93425 19.976 6.71368 20.1235 6.47088 20.2241C6.22808 20.3248 5.96783 20.3766 5.705 20.3766C5.44217 20.3766 5.18192 20.3248 4.93912 20.2241C4.69632 20.1235 4.47575 19.976 4.29 19.79C4.10405 19.6043 3.95653 19.3837 3.85588 19.1409C3.75523 18.8981 3.70343 18.6378 3.70343 18.375C3.70343 18.1122 3.75523 17.8519 3.85588 17.6091C3.95653 17.3663 4.10405 17.1457 4.29 16.96L4.35 16.9C4.58054 16.6643 4.73519 16.365 4.794 16.0406C4.85282 15.7162 4.81312 15.3816 4.68 15.08C4.55324 14.7842 4.34276 14.532 4.07447 14.3543C3.80618 14.1766 3.49179 14.0813 3.17 14.08H3C2.46957 14.08 1.96086 13.8693 1.58579 13.4942C1.21071 13.1191 1 12.6104 1 12.08C1 11.5496 1.21071 11.0409 1.58579 10.6658C1.96086 10.2907 2.46957 10.08 3 10.08H3.09C3.42099 10.0723 3.742 9.96512 4.0113 9.77251C4.28059 9.5799 4.48572 9.31074 4.6 9C4.73312 8.69838 4.77282 8.36381 4.714 8.03941C4.65519 7.71502 4.50054 7.41568 4.27 7.18L4.21 7.12C4.02405 6.93425 3.87653 6.71368 3.77588 6.47088C3.67523 6.22808 3.62343 5.96783 3.62343 5.705C3.62343 5.44217 3.67523 5.18192 3.77588 4.93912C3.87653 4.69632 4.02405 4.47575 4.21 4.29C4.39575 4.10405 4.61632 3.95653 4.85912 3.85588C5.10192 3.75523 5.36217 3.70343 5.625 3.70343C5.88783 3.70343 6.14808 3.75523 6.39088 3.85588C6.63368 3.95653 6.85425 4.10405 7.04 4.29L7.1 4.35C7.33568 4.58054 7.63502 4.73519 7.95941 4.794C8.28381 4.85282 8.61838 4.81312 8.92 4.68H9C9.29577 4.55324 9.54802 4.34276 9.72569 4.07447C9.90337 3.80618 9.99872 3.49179 10 3.17V3C10 2.46957 10.2107 1.96086 10.5858 1.58579C10.9609 1.21071 11.4696 1 12 1C12.5304 1 13.0391 1.21071 13.4142 1.58579C13.7893 1.96086 14 2.46957 14 3V3.09C14.0013 3.41179 14.0966 3.72618 14.2743 3.99447C14.452 4.26276 14.7042 4.47324 15 4.6C15.3016 4.73312 15.6362 4.77282 15.9606 4.714C16.285 4.65519 16.5843 4.50054 16.82 4.27L16.88 4.21C17.0657 4.02405 17.2863 3.87653 17.5291 3.77588C17.7719 3.67523 18.0322 3.62343 18.295 3.62343C18.5578 3.62343 18.8181 3.67523 19.0609 3.77588C19.3037 3.87653 19.5243 4.02405 19.71 4.21C19.896 4.39575 20.0435 4.61632 20.1441 4.85912C20.2448 5.10192 20.2966 5.36217 20.2966 5.625C20.2966 5.88783 20.2448 6.14808 20.1441 6.39088C20.0435 6.63368 19.896 6.85425 19.71 7.04L19.65 7.1C19.4195 7.33568 19.2648 7.63502 19.206 7.95941C19.1472 8.28381 19.1869 8.61838 19.32 8.92V9C19.4468 9.29577 19.6572 9.54802 19.9255 9.72569C20.1938 9.90337 20.5082 9.99872 20.83 10H21C21.5304 10 22.0391 10.2107 22.4142 10.5858C22.7893 10.9609 23 11.4696 23 12C23 12.5304 22.7893 13.0391 22.4142 13.4142C22.0391 13.7893 21.5304 14 21 14H20.91C20.5882 14.0013 20.2738 14.0966 20.0055 14.2743C19.7372 14.452 19.5268 14.7042 19.4 15Z" stroke="#4285f4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
+							匹配設置
+						</h3>
+						
+						<div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+							<div>
+								<div style="font-weight: 500; color: #2d3748; margin-bottom: 4px;">AI 智能匹配權重</div>
+								<div style="font-size: 14px; color: #718096;">調整 AI 匹配時各因素的權重影響</div>
+							</div>
+							<button class="btn btn-secondary" style="padding: 8px 12px; font-size: 14px;">設定</button>
+						</div>
+						
+						<div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+							<div>
+								<div style="font-weight: 500; color: #2d3748; margin-bottom: 4px;">匹配最大展示數量</div>
+								<div style="font-size: 14px; color: #718096;">一般匹配顯示的最大結果數量</div>
+							</div>
+							<select class="dropdown" style="width: auto; padding: 8px 30px 8px 12px; font-size: 14px;">
+								<option>10</option>
+								<option>20</option>
+								<option>30</option>
+								<option>50</option>
+							</select>
+						</div>
+						
+						<div style="display: flex; justify-content: space-between; align-items: center;">
+							<div>
+								<div style="font-weight: 500; color: #2d3748; margin-bottom: 4px;">啟用區域優先匹配</div>
+								<div style="font-size: 14px; color: #718096;">優先推薦相同地區的教師/學生</div>
+							</div>
+							<label class="switch" style="position: relative; display: inline-block; width: 50px; height: 24px;">
+								<input type="checkbox" checked style="opacity: 0; width: 0; height: 0;">
+								<span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #4285f4; border-radius: 34px; transition: .4s;">
+									<span style="position: absolute; content: ''; height: 20px; width: 20px; left: 2px; bottom: 2px; background-color: white; border-radius: 50%; transition: .4s; transform: translateX(26px);"></span>
+								</span>
+							</label>
+						</div>
+					</div>
+					
+					<div style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); padding: 16px; margin-bottom: 20px;">
+						<h3 style="margin-bottom: 16px; color: #2d3748; display: flex; align-items: center;">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px;">
+								<path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#34a853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								<path d="M9 12L11 14L15 10" stroke="#34a853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
+							用戶驗證設置
+						</h3>
+						
+						<div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+							<div>
+								<div style="font-weight: 500; color: #2d3748; margin-bottom: 4px;">教師資格驗證</div>
+								<div style="font-size: 14px; color: #718096;">要求教師上傳身份證明和學歷證明</div>
+							</div>
+							<label class="switch" style="position: relative; display: inline-block; width: 50px; height: 24px;">
+								<input type="checkbox" checked style="opacity: 0; width: 0; height: 0;">
+								<span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #34a853; border-radius: 34px; transition: .4s;">
+									<span style="position: absolute; content: ''; height: 20px; width: 20px; left: 2px; bottom: 2px; background-color: white; border-radius: 50%; transition: .4s; transform: translateX(26px);"></span>
+								</span>
+							</label>
+						</div>
+						
+						<div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+							<div>
+								<div style="font-weight: 500; color: #2d3748; margin-bottom: 4px;">學生年齡限制</div>
+								<div style="font-size: 14px; color: #718096;">未滿 16 歲學生需要家長監護</div>
+							</div>
+							<label class="switch" style="position: relative; display: inline-block; width: 50px; height: 24px;">
+								<input type="checkbox" checked style="opacity: 0; width: 0; height: 0;">
+								<span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #34a853; border-radius: 34px; transition: .4s;">
+									<span style="position: absolute; content: ''; height: 20px; width: 20px; left: 2px; bottom: 2px; background-color: white; border-radius: 50%; transition: .4s; transform: translateX(26px);"></span>
+								</span>
+							</label>
+						</div>
+						
+						<div style="display: flex; justify-content: space-between; align-items: center;">
+							<div>
+								<div style="font-weight: 500; color: #2d3748; margin-bottom: 4px;">啟用背景審查</div>
+								<div style="font-size: 14px; color: #718096;">教師需通過背景調查才能接收學生</div>
+							</div>
+							<label class="switch" style="position: relative; display: inline-block; width: 50px; height: 24px;">
+								<input type="checkbox" style="opacity: 0; width: 0; height: 0;">
+								<span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #e2e8f0; border-radius: 34px; transition: .4s;">
+									<span style="position: absolute; content: ''; height: 20px; width: 20px; left: 2px; bottom: 2px; background-color: white; border-radius: 50%; transition: .4s;"></span>
+								</span>
+							</label>
+						</div>
+					</div>
+					
+					<div style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); padding: 16px; margin-bottom: 20px;">
+						<h3 style="margin-bottom: 16px; color: #2d3748; display: flex; align-items: center;">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px;">
+								<path d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="#9c27b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								<path d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21" stroke="#9c27b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
+							系統通知設置
+						</h3>
+						
+						<div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+							<div>
+								<div style="font-weight: 500; color: #2d3748; margin-bottom: 4px;">匹配成功通知</div>
+								<div style="font-size: 14px; color: #718096;">當用戶成功匹配時發送通知</div>
+							</div>
+							<label class="switch" style="position: relative; display: inline-block; width: 50px; height: 24px;">
+								<input type="checkbox" checked style="opacity: 0; width: 0; height: 0;">
+								<span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #9c27b0; border-radius: 34px; transition: .4s;">
+									<span style="position: absolute; content: ''; height: 20px; width: 20px; left: 2px; bottom: 2px; background-color: white; border-radius: 50%; transition: .4s; transform: translateX(26px);"></span>
+								</span>
+							</label>
+						</div>
+						
+						<div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+							<div>
+								<div style="font-weight: 500; color: #2d3748; margin-bottom: 4px;">系統更新通知</div>
+								<div style="font-size: 14px; color: #718096;">向所有用戶發送系統更新通知</div>
+							</div>
+							<label class="switch" style="position: relative; display: inline-block; width: 50px; height: 24px;">
+								<input type="checkbox" checked style="opacity: 0; width: 0; height: 0;">
+								<span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #9c27b0; border-radius: 34px; transition: .4s;">
+									<span style="position: absolute; content: ''; height: 20px; width: 20px; left: 2px; bottom: 2px; background-color: white; border-radius: 50%; transition: .4s; transform: translateX(26px);"></span>
+								</span>
+							</label>
+						</div>
+						
+						<div style="display: flex; justify-content: space-between; align-items: center;">
+							<div>
+								<div style="font-weight: 500; color: #2d3748; margin-bottom: 4px;">活動推廣通知</div>
+								<div style="font-size: 14px; color: #718096;">向用戶發送促銷和活動信息</div>
+							</div>
+							<label class="switch" style="position: relative; display: inline-block; width: 50px; height: 24px;">
+								<input type="checkbox" style="opacity: 0; width: 0; height: 0;">
+								<span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #e2e8f0; border-radius: 34px; transition: .4s;">
+									<span style="position: absolute; content: ''; height: 20px; width: 20px; left: 2px; bottom: 2px; background-color: white; border-radius: 50%; transition: .4s;"></span>
+								</span>
+							</label>
+						</div>
+					</div>
+					
+					<div style="display: flex; gap: 10px; margin-top: 20px;">
+						<button class="btn btn-secondary" style="flex: 1;">恢復默認設置</button>
+						<button class="btn btn-primary" style="flex: 1;">保存更改</button>
+					</div>
+				</div>
+			</div>
+
+			</div>
+        </div>
+    </div>
+</body>
+</html>
